@@ -1,18 +1,16 @@
 package com.capstone.capstone.service;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
+
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
+import com.capstone.capstone.model.amazon.AmazonImage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -35,14 +33,6 @@ public class AmazonClientService {
     @Value("${amazon.s3.bucket-name}")
     private String bucketName;
 
-    // The IAM access key.
-    @Value("${amazon.s3.access-key}")
-    private String accessKey;
-
-    // The IAM secret key.
-    @Value("${amazon.s3.secret-key}")
-    private String secretKey;
-
     // Getters for parents.
     protected AmazonS3 getClient() {
         return amazonS3;
@@ -57,13 +47,13 @@ public class AmazonClientService {
     }
 
 
-    public String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile, String userID) {
+
 
         File file = convertMultiPartFileToFile(multipartFile);
-        amazonS3.putObject(bucketName, "1", file);
+        PutObjectResult putObjectResult = amazonS3.putObject(bucketName, userID, file);
         file.delete();
-        return "File uploaded";
-
+        return userID;
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) {

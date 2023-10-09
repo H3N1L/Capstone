@@ -1,5 +1,6 @@
 package com.capstone.capstone.controller;
 
+import com.capstone.capstone.model.amazon.AmazonImage;
 import com.capstone.capstone.service.AmazonClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,9 @@ public class StorageController {
 
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam(value = "multipartFile") MultipartFile multipartFile) {
-        return new ResponseEntity<>(amazonClientService.uploadFile(multipartFile), HttpStatus.OK);
+    public ResponseEntity<String> uploadFile(
+            @RequestParam(value = "multipartFile") MultipartFile multipartFile,
+            @RequestParam(value = "UserId") String userID) {
+        return new ResponseEntity<>(amazonClientService.uploadFile(multipartFile, userID), HttpStatus.OK);
     }
 }

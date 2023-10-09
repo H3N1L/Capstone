@@ -3,8 +3,8 @@ package com.capstone.capstone.controller;
 
 import com.capstone.capstone.repository.EvidenceRepository;
 import com.capstone.capstone.repository.UserInformationRepository;
-import com.capstone.capstone.model.Evidence;
-import com.capstone.capstone.model.UserInformation;
+import com.capstone.capstone.model.mongodb.Evidence;
+import com.capstone.capstone.model.mongodb.UserInformation;
 import com.capstone.capstone.service.TextEvidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

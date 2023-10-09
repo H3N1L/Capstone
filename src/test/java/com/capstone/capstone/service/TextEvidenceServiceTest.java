@@ -1,6 +1,6 @@
 package com.capstone.capstone.service;
 
-import com.capstone.capstone.model.Evidence;
+import com.capstone.capstone.model.mongodb.Evidence;
 import com.capstone.capstone.repository.EvidenceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -1,6 +1,6 @@
 package com.capstone.capstone.service;
 
-import com.capstone.capstone.model.Evidence;
+import com.capstone.capstone.model.mongodb.Evidence;
 import com.capstone.capstone.repository.EvidenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.capstone.capstone.repository;
 
-import com.capstone.capstone.model.Evidence;
+import com.capstone.capstone.model.mongodb.Evidence;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 

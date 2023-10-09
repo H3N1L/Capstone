@@ -1,4 +1,4 @@
-package com.capstone.capstone.model;
+package com.capstone.capstone.model.mongodb;
 
 import lombok.Builder;
 import lombok.Getter;
