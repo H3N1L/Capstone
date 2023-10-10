@@ -29,8 +29,8 @@ class TextEvidenceServiceTest {
         when(evidenceRepository.findAll())
                 .thenReturn(List.of(Evidence.builder()
                         .id("123")
-                        .evidence("evidence")
-                        .KsbCode("s1")
+                        .KsbCode("evidence")
+                        .id("s1")
                         .build()));
 
         List<Evidence> evidences = textEvidenceService.getAllEvidence();

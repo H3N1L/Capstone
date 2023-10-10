@@ -2,22 +2,22 @@ package com.capstone.capstone.model.mongodb;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 
-
+@Builder
 @Getter
 @Setter
-@Builder
-@Document(collection = "textEvidence")
-public class Evidence  {
-     @Id
-     private String id;
+@Document(collection = "evidenceCount")
+public class EvidenceCount {
 
-     private String evidenceKey;
-     private String UserId;
-     private String KsbCode;
+    @Id
+    private String id;
+
+    private String ksbCode;
+    private String userId;
+    private BigDecimal count;
 }

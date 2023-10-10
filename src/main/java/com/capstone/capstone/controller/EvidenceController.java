@@ -7,15 +7,14 @@ import com.capstone.capstone.model.mongodb.Evidence;
 import com.capstone.capstone.model.mongodb.UserInformation;
 import com.capstone.capstone.service.TextEvidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class EvidenceController {
@@ -52,5 +51,28 @@ public class EvidenceController {
         UserInformation userInformation =  userInformationRepository.findByFistName("Henil");
         userInformation.setKey(UUID.randomUUID().toString());
         return userInformationRepository.save(userInformation);
+    }
+
+    @PostMapping("/addMarvin")
+    public ResponseEntity<String> addMarvin () {
+        return new ResponseEntity<>(makeMarvin(), HttpStatus.ACCEPTED);
+    }
+
+    public String makeMarvin() {
+        UserInformation userInformation =
+                UserInformation.builder()
+                        .firstName("Marvin")
+                        .lastName("Mbasu")
+                        .email("marvin@marvin.com")
+                        .id("2")
+                        .universityCode("NUC2023")
+                        .degreeCode("SE2022")
+                        .key(UUID.randomUUID().toString())
+                        .specialKsb(new ArrayList<>(Collections.singleton("K1")))
+                        .build();
+
+        userInformationRepository.insert(userInformation);
+
+        return "Marvin is in the building";
     }
 }

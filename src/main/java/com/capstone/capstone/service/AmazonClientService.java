@@ -2,8 +2,7 @@ package com.capstone.capstone.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
-import com.capstone.capstone.model.amazon.AmazonImage;
+import com.capstone.capstone.model.amazon.EvidenceInformation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -22,6 +22,9 @@ public class AmazonClientService {
     // AmazonS3 Client, in this object you have all AWS API calls about S3.
     @Autowired
     private AmazonS3 amazonS3;
+
+//    @Autowired
+//    TextEvidenceService textEvidenceService;
 
     // Your bucket URL, this URL is https://{bucket-name}.s3-{region}.amazonaws.com/
     // If you don't know if your URL is ok, send one file to your bucket using AWS and
@@ -48,8 +51,6 @@ public class AmazonClientService {
 
 
     public String uploadFile(MultipartFile multipartFile, String userID) {
-
-
         File file = convertMultiPartFileToFile(multipartFile);
         PutObjectResult putObjectResult = amazonS3.putObject(bucketName, userID, file);
         file.delete();
@@ -67,6 +68,19 @@ public class AmazonClientService {
         }
         return convertedFile;
     }
+
+//    public String submitEvidence(MultipartFile multipartFile, EvidenceInformation evidenceInformation) {
+//        String fileKey = UUID.randomUUID().toString();
+//        File file = convertMultiPartFileToFile(multipartFile);
+//        amazonS3.putObject(bucketName, fileKey, file);
+//        textEvidenceService.addEvidenceLink(evidenceInformation);
+//        textEvidenceService.insertEvidence(evidenceInformation, fileKey);
+//        return "Evidence submitted successfully";
+//    }
+
+
+
+
 
 
 }
