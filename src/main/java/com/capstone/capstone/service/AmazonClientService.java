@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,14 +18,15 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@Transactional
 public class AmazonClientService {
 
     // AmazonS3 Client, in this object you have all AWS API calls about S3.
     @Autowired
     private AmazonS3 amazonS3;
 
-//    @Autowired
-//    TextEvidenceService textEvidenceService;
+    @Autowired
+    TextEvidenceService textEvidenceService;
 
     // Your bucket URL, this URL is https://{bucket-name}.s3-{region}.amazonaws.com/
     // If you don't know if your URL is ok, send one file to your bucket using AWS and
@@ -69,14 +71,15 @@ public class AmazonClientService {
         return convertedFile;
     }
 
-//    public String submitEvidence(MultipartFile multipartFile, EvidenceInformation evidenceInformation) {
-//        String fileKey = UUID.randomUUID().toString();
-//        File file = convertMultiPartFileToFile(multipartFile);
-//        amazonS3.putObject(bucketName, fileKey, file);
-//        textEvidenceService.addEvidenceLink(evidenceInformation);
-//        textEvidenceService.insertEvidence(evidenceInformation, fileKey);
-//        return "Evidence submitted successfully";
-//    }
+    public String submitEvidence(MultipartFile multipartFile, EvidenceInformation evidenceInformation) {
+        String fileKey = UUID.randomUUID().toString();
+        File file = convertMultiPartFileToFile(multipartFile);
+        amazonS3.putObject(bucketName, fileKey, file);
+        textEvidenceService.addEvidenceLink(evidenceInformation);
+        textEvidenceService.insertEvidence(evidenceInformation, fileKey);
+        file.delete();
+        return "Evidence submitted successfully";
+    }
 
 
 
