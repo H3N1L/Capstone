@@ -1,7 +1,7 @@
 package com.capstone.capstone.service;
 
 import com.capstone.capstone.model.mongodb.Evidence;
-import com.capstone.capstone.repository.EvidenceRepository;
+import com.capstone.capstone.repository.Archive.MongoEvidenceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ class TextEvidenceServiceTest {
 
     @Mock
     @Autowired
-    private EvidenceRepository evidenceRepository;
+    private MongoEvidenceRepository evidenceRepository;
 
     @InjectMocks TextEvidenceService textEvidenceService;
 

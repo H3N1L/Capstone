@@ -1,8 +1,7 @@
 package com.capstone.capstone.repository;
 
-import com.capstone.capstone.model.mongodb.Evidence;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.capstone.capstone.model.Entity.Evidence;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-
-public interface EvidenceRepository extends MongoRepository<Evidence, String> {
+public interface EvidenceRepository extends JpaRepository<Evidence, Integer> {
 }

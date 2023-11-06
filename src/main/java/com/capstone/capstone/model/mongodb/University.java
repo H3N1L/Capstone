@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Getter
 @Setter
+@Document(collection="university")
 public class University {
 
     @Id

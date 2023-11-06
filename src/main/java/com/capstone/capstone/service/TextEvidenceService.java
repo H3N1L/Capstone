@@ -1,24 +1,26 @@
 package com.capstone.capstone.service;
 
+import com.capstone.capstone.model.Entity.Apprentice;
 import com.capstone.capstone.model.amazon.EvidenceInformation;
 import com.capstone.capstone.model.mongodb.Evidence;
 import com.capstone.capstone.model.mongodb.EvidenceCount;
-import com.capstone.capstone.repository.EvidenceCountRepository;
-import com.capstone.capstone.repository.EvidenceRepository;
+import com.capstone.capstone.model.mongodb.UserInformation;
+import com.capstone.capstone.repository.Archive.MongoEvidenceCountRepository;
+import com.capstone.capstone.repository.Archive.MongoEvidenceRepository;
+import com.capstone.capstone.repository.Archive.MongoUserInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TextEvidenceService {
 
-    @Autowired
-    private EvidenceRepository evidenceRepository;
-
-    @Autowired
-    private EvidenceCountRepository evidenceCountRepository;
+    @Autowired private MongoEvidenceRepository evidenceRepository;
+    @Autowired private MongoEvidenceCountRepository evidenceCountRepository;
+    @Autowired private MongoUserInformationRepository userInformationRepository;
 
 
     public List<Evidence> getAllEvidence() {
@@ -41,6 +43,20 @@ public class TextEvidenceService {
                 .build());
 
     }
+
+    public String insertUser(UserInformation userInformation) {
+        Apprentice apprentice = Apprentice.builder().build();
+
+
+
+
+        String userKey = UUID.randomUUID().toString();
+        userInformation.setKey(userKey);
+        userInformationRepository.insert(userInformation);
+        return userKey;
+    }
+
+
 
 
 }

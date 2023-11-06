@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -22,20 +19,17 @@ import java.util.UUID;
 @Transactional
 public class AmazonClientService {
 
-    // AmazonS3 Client, in this object you have all AWS API calls about S3.
+
     @Autowired
     private AmazonS3 amazonS3;
 
     @Autowired
     TextEvidenceService textEvidenceService;
 
-    // Your bucket URL, this URL is https://{bucket-name}.s3-{region}.amazonaws.com/
-    // If you don't know if your URL is ok, send one file to your bucket using AWS and
-    // click on them, the file URL contains your bucket URL.
     @Value("${amazon.s3.endpoint}")
     private String url;
 
-    // Your bucket name.
+    // bucket name.
     @Value("${amazon.s3.bucket-name}")
     private String bucketName;
 
