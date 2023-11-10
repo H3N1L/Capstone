@@ -2,6 +2,7 @@ package com.capstone.capstone.controller;
 
 
 import com.capstone.capstone.model.Entity.Apprentice;
+import com.capstone.capstone.model.Entity.UserEvidence;
 import com.capstone.capstone.model.mongodb.University;
 import com.capstone.capstone.repository.ApprenticeRepository;
 import com.capstone.capstone.repository.Archive.MongoEvidenceRepository;
@@ -13,6 +14,7 @@ import com.capstone.capstone.service.ApprenticeService;
 import com.capstone.capstone.service.TextEvidenceService;
 import com.capstone.capstone.util.UniversitySeedData;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ import java.util.UUID;
 
 
 @RestController
+@Slf4j
 public class EvidenceController {
 
     @Autowired private TextEvidenceService textEvidenceService;
@@ -40,11 +43,11 @@ public class EvidenceController {
 
 
 
-    @ApiIgnore
-    @RequestMapping(value="/")
-    public void redirect(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui.html");
-    }
+//    @ApiIgnore
+//    @RequestMapping(value="/")
+//    public void redirect(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("/swagger-ui.html");
+//    }
 
     @PostMapping("/addApprentice")
     public Apprentice  addApprentice() {
@@ -54,6 +57,11 @@ public class EvidenceController {
                         .firstName("Fenil")
                         .lastName("Soni")
                         .build());
+    }
+
+    @GetMapping("/Connected")
+    public ResponseEntity<String> connect() {
+        return new ResponseEntity<>("Connected", HttpStatus.CREATED);
     }
 
     @PostMapping("/updateApprenticeFirstName")
@@ -77,6 +85,16 @@ public class EvidenceController {
         UserInformation userInformation =  userInformationRepository.findByFistName("Henil");
         userInformation.setKey(UUID.randomUUID().toString());
         return userInformationRepository.save(userInformation);
+    }
+
+    @PostMapping("/AddEvidence")
+    public String addFrontEndEvidence(
+           @RequestBody UserEvidence userEvidence) {
+
+        log.info("Evidence ------------> " + userEvidence);
+
+
+        return "Evidence Retrieved";
     }
 
 //    @PostMapping("/addMarvin")
