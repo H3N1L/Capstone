@@ -29,8 +29,8 @@ public class Evidence {
     @Column(name="s3_guid")
     private String s3Guid;
 
-    @Column(name = "insert_timestamp")
-    private LocalDateTime insertTimestamp;
+//    @Column(name = "insert_timestamp")
+//    private LocalDateTime insertTimestamp;
 
     @Column(name="evidence_description")
     private String evidenceDescription;
