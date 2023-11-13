@@ -28,4 +28,6 @@ public class UserEvidence {
 
     private String description;
 
+    private String submittedContent;
+
 }

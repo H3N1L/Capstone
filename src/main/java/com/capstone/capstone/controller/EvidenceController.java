@@ -87,7 +87,7 @@ public class EvidenceController {
     public String addFrontEndEvidence(
            @RequestBody UserEvidence userEvidence) {
 
-        String fileKey = amazonClientService.uploadEvidencePayload(userEvidence.getDescription());
+        String fileKey = amazonClientService.uploadEvidencePayload(userEvidence.getSubmittedContent());
         Evidence evidence =
                 Evidence.builder()
                         .evidenceCategory(userEvidence.getType())
@@ -99,7 +99,7 @@ public class EvidenceController {
 
         log.info("Evidence ------------> " + userEvidence);
 
-        return "Evidence Submitted successfully";
+        return "Evidence Submitted successfully and " + fileKey;
     }
 
 //    @PostMapping("/addMarvin")
