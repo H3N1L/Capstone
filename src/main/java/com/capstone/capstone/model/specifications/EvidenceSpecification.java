@@ -31,35 +31,35 @@ public class EvidenceSpecification {
                 criteriaBuilder.equal(root.get("university_code"), universityCode);
     }
 
-//    public static Specification<Evidence> byApprenticeIdAndCurrentMonth(Integer apprenticeId) {
-//        return (root, query, criteriaBuilder) -> {
-//            List<Predicate> predicates = new ArrayList<>();
-//            predicates.add(criteriaBuilder.equal(root.get("apprentice_id"), apprenticeId));
-//
-//            // Getting the current month's start and end date
-//            LocalDateTime now = LocalDateTime.now();
-//            LocalDateTime startOfMonth = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-//            LocalDateTime endOfMonth = now
-//                    .withDayOfMonth(now.getMonth().maxLength()).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
-//
-//            // Adding the condition for the timestamp within the current month
-//            predicates.add(criteriaBuilder.between(root.get("insert_timestamp"), startOfMonth, endOfMonth));
-//
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//        };
-//    }
-//
-//    public static Specification<Evidence> submittedOn(Integer apprenticeId, LocalDateTime submittedOn) {
-//        return (root, criteriaQuery, criteriaBuilder) -> {
-//            List<Predicate> predicates = new ArrayList<>();
-//            predicates.add(criteriaBuilder.equal(root.get("apprentice_id"), apprenticeId));
-//            LocalDateTime startOfDay = submittedOn.withHour(0).withMinute(0).withSecond(0).withNano(0);
-//            LocalDateTime endOfDay = submittedOn.withHour(23).withMinute(59).withSecond(59).withNano(999999999);
-//            predicates.add(criteriaBuilder.between(root.get("insert_timestamp"), startOfDay, endOfDay));
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//
-//        };
-//    }
+    public static Specification<Evidence> hasApprenticeIdAndInsertTimestamp(Integer apprenticeId) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.equal(root.get("apprentice_id"), apprenticeId));
+
+            // Getting the current month's start and end date
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime startOfMonth = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+            LocalDateTime endOfMonth = now
+                    .withDayOfMonth(now.getMonth().maxLength()).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+
+            // Adding the condition for the timestamp within the current month
+            predicates.add(criteriaBuilder.between(root.get("insert_timestamp"), startOfMonth, endOfMonth));
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public static Specification<Evidence> hasInsertTimestamp(Integer apprenticeId, LocalDateTime submittedOn) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.equal(root.get("apprentice_id"), apprenticeId));
+            LocalDateTime startOfDay = submittedOn.withHour(0).withMinute(0).withSecond(0).withNano(0);
+            LocalDateTime endOfDay = submittedOn.withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+            predicates.add(criteriaBuilder.between(root.get("insert_timestamp"), startOfDay, endOfDay));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+
+        };
+    }
 
 
 

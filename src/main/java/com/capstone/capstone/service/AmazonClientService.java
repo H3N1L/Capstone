@@ -64,6 +64,12 @@ public class AmazonClientService {
         return "Evidence submitted successfully";
     }
 
+    public String uploadEvidencePayload(String evidence) {
+        String fileKey = UUID.randomUUID().toString();
+        amazonS3.putObject(bucketName,fileKey, evidence);
+        return fileKey;
+    }
+
 
 
 

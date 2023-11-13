@@ -1,6 +1,6 @@
 package com.capstone.capstone.service;
 
-import com.capstone.capstone.model.mongodb.Evidence;
+import com.capstone.capstone.model.mongodb.EvidenceMongo;
 import com.capstone.capstone.repository.Archive.MongoEvidenceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +27,13 @@ class TextEvidenceServiceTest {
     void checkFindAllMethod() {
 
         when(evidenceRepository.findAll())
-                .thenReturn(List.of(Evidence.builder()
+                .thenReturn(List.of(EvidenceMongo.builder()
                         .id("123")
                         .KsbCode("evidence")
                         .id("s1")
                         .build()));
 
-        List<Evidence> evidences = textEvidenceService.getAllEvidence();
+        List<EvidenceMongo> evidences = textEvidenceService.getAllEvidence();
 
         verify(evidenceRepository, times(1)).findAll();
 

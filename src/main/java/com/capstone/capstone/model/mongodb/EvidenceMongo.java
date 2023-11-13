@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Builder
 @Document(collection = "textEvidence")
-public class Evidence  {
+public class EvidenceMongo {
      @Id
      private String id;
 

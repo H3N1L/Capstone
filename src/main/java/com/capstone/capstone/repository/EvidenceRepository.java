@@ -13,7 +13,7 @@ public interface EvidenceRepository extends JpaRepository<Evidence, Integer> {
 
 //    //Find All Evidence By ApprenticeId and Month
 //    List<Evidence>  findByApprenticeIdAndInsertTimestamp(Specification<Evidence> evidenceSpecification);
-
+//
 //    //Find by Date
-//    List<Evidence> findByDate(Specification<Evidence> evidenceSpecification);
+//    List<Evidence> findByInsertTimestamp(Specification<Evidence> evidenceSpecification);
 }

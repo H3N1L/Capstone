@@ -24,11 +24,12 @@ public class EvidenceService {
 
 //    public List<Evidence> retrieveAllMonthlyApprenticeEvidence(Integer apprenticeId) {
 //        return evidenceRepository
-//                .findByApprenticeIdAndInsertTimestamp(EvidenceSpecification.byApprenticeIdAndCurrentMonth(apprenticeId));
+//                .findByApprenticeIdAndInsertTimestamp(EvidenceSpecification
+//                        .hasApprenticeIdAndInsertTimestamp(apprenticeId));
 //    }
-
+//
 //    public List<Evidence> retrieveApprenticeEvidenceByDate(Integer apprenticeId, LocalDateTime submittedOn) {
-//        return evidenceRepository.findByDate(EvidenceSpecification.submittedOn(apprenticeId,submittedOn));
+//        return evidenceRepository.findByInsertTimestamp(EvidenceSpecification.hasInsertTimestamp(apprenticeId,submittedOn));
 //
 //    }
 

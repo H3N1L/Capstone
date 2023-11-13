@@ -2,7 +2,7 @@ package com.capstone.capstone.service;
 
 import com.capstone.capstone.model.Entity.Apprentice;
 import com.capstone.capstone.model.amazon.EvidenceInformation;
-import com.capstone.capstone.model.mongodb.Evidence;
+import com.capstone.capstone.model.mongodb.EvidenceMongo;
 import com.capstone.capstone.model.mongodb.EvidenceCount;
 import com.capstone.capstone.model.mongodb.UserInformation;
 import com.capstone.capstone.repository.Archive.MongoEvidenceCountRepository;
@@ -23,7 +23,7 @@ public class TextEvidenceService {
     @Autowired private MongoUserInformationRepository userInformationRepository;
 
 
-    public List<Evidence> getAllEvidence() {
+    public List<EvidenceMongo> getAllEvidence() {
         return evidenceRepository.findAll();
     }
 
@@ -36,7 +36,7 @@ public class TextEvidenceService {
     }
 
     public void insertEvidence(EvidenceInformation evidenceInformation, String s3BucketKey) {
-        evidenceRepository.insert(Evidence.builder()
+        evidenceRepository.insert(EvidenceMongo.builder()
                 .evidenceKey(s3BucketKey)
                 .UserId(evidenceInformation.getUserId())
                 .KsbCode(evidenceInformation.getKsbCode())

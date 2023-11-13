@@ -2,29 +2,24 @@ package com.capstone.capstone.controller;
 
 
 import com.capstone.capstone.model.Entity.Apprentice;
+import com.capstone.capstone.model.Entity.Evidence;
 import com.capstone.capstone.model.Entity.UserEvidence;
-import com.capstone.capstone.model.mongodb.University;
 import com.capstone.capstone.repository.ApprenticeRepository;
 import com.capstone.capstone.repository.Archive.MongoEvidenceRepository;
 import com.capstone.capstone.repository.Archive.MongoUniversityRepository;
 import com.capstone.capstone.repository.Archive.MongoUserInformationRepository;
-import com.capstone.capstone.model.mongodb.Evidence;
+import com.capstone.capstone.model.mongodb.EvidenceMongo;
 import com.capstone.capstone.model.mongodb.UserInformation;
+import com.capstone.capstone.repository.EvidenceRepository;
+import com.capstone.capstone.service.AmazonClientService;
 import com.capstone.capstone.service.ApprenticeService;
 import com.capstone.capstone.service.TextEvidenceService;
-import com.capstone.capstone.util.UniversitySeedData;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,12 +29,13 @@ import java.util.UUID;
 public class EvidenceController {
 
     @Autowired private TextEvidenceService textEvidenceService;
-    @Autowired private MongoEvidenceRepository evidenceRepository;
     @Autowired private MongoUserInformationRepository userInformationRepository;
     @Autowired private MongoUniversityRepository universityRepository;
     @Autowired private ApprenticeRepository apprenticeRepository;
 
     @Autowired private ApprenticeService apprenticeService;
+    @Autowired private AmazonClientService amazonClientService;
+    @Autowired private EvidenceRepository evidenceRepository;
 
 
 
@@ -70,7 +66,7 @@ public class EvidenceController {
     }
 
     @GetMapping("/evidence")
-    public List<Evidence> getAllEvidence() {
+    public List<EvidenceMongo> getAllEvidence() {
         return textEvidenceService.getAllEvidence();
     }
 
@@ -91,10 +87,19 @@ public class EvidenceController {
     public String addFrontEndEvidence(
            @RequestBody UserEvidence userEvidence) {
 
+        String fileKey = amazonClientService.uploadEvidencePayload(userEvidence.getDescription());
+        Evidence evidence =
+                Evidence.builder()
+                        .evidenceCategory(userEvidence.getType())
+                        .evidenceDescription("First Complete Evidence Flow")
+                        .s3Guid(fileKey)
+                .build();
+
+        evidenceRepository.save(evidence);
+
         log.info("Evidence ------------> " + userEvidence);
 
-
-        return "Evidence Retrieved";
+        return "Evidence Submitted successfully";
     }
 
 //    @PostMapping("/addMarvin")
