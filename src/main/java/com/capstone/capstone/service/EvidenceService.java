@@ -5,6 +5,7 @@ import com.capstone.capstone.model.specifications.EvidenceSpecification;
 import com.capstone.capstone.repository.ApprenticeRepository;
 import com.capstone.capstone.repository.EvidenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,8 +19,10 @@ public class EvidenceService {
 
 
 
-    public List<Evidence> retrieveAllEvidence(Integer apprenticeId) {
-        return evidenceRepository.findAll(EvidenceSpecification.hasApprenticeId(apprenticeId));
+    public List<Evidence> retrieveAllEvidenceByApprenticeId(Integer apprenticeId) {
+        return evidenceRepository.findAll(Specification.where(
+                EvidenceSpecification.hasApprenticeId(apprenticeId)
+        ));
     }
 
 //    public List<Evidence> retrieveAllMonthlyApprenticeEvidence(Integer apprenticeId) {

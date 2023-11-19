@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -29,8 +31,11 @@ public class Evidence {
     @Column(name="s3_guid")
     private String s3Guid;
 
-//    @Column(name = "insert_timestamp")
-//    private LocalDateTime insertTimestamp;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    @Column(name = "insert_timestamp", updatable = false)
+    private Date insertTimestamp;
 
     @Column(name="evidence_description")
     private String evidenceDescription;
