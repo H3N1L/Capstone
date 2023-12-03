@@ -26,6 +26,11 @@ public class EvidenceSpecification {
                 criteriaBuilder.equal(root.get("s3_guid"), s3Guid);
     }
 
+    public static Specification<Evidence> hasSpecialism(String specialism) {
+        return (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("evidence_specialism"), specialism);
+    }
+
     public static Specification<Evidence> hasUniversityCode(String universityCode) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("university_code"), universityCode);

@@ -2,6 +2,7 @@ package com.capstone.capstone.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import com.capstone.capstone.model.amazon.EvidenceInformation;
 import com.capstone.capstone.util.ConvertToFile;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,16 @@ public class AmazonClientService {
         amazonS3.putObject(bucketName,fileKey, evidence);
         return fileKey;
     }
+
+    public String retrieveSubmittedContent(String s3Guid) {
+        return amazonS3.getObjectAsString(bucketName, s3Guid);
+    }
+
+
+
+
+
+
 
 
 

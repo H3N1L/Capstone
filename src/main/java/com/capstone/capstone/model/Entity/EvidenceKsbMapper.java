@@ -12,15 +12,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EvidenceToKsb {
+@Table(name = "evidenceKsbMapper")
+public class EvidenceKsbMapper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer evidenceToKsbId;
 
     @Column(name="evidence_id")
-    private Integer apprenticeId;
-
+    private Integer evidenceId;
 
     @Column(name="ksb_code")
     private String ksbCode;

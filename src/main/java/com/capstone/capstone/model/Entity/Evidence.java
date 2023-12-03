@@ -22,15 +22,17 @@ public class Evidence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer evidenceId;
 
-    @Column(name = "evidence_category")
-    private String evidenceCategory;
+    @Column(name = "evidence_type")
+    private String type;
+
+    @Column(name = "evidence_specialism")
+    private String specialism;
 
     @Column(name="apprentice_id")
     private Integer apprenticeId;
 
     @Column(name="s3_guid")
     private String s3Guid;
-
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
