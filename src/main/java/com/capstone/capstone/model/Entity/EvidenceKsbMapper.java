@@ -20,7 +20,7 @@ public class EvidenceKsbMapper {
     private Integer evidenceToKsbId;
 
     @Column(name="evidence_id")
-    private Integer evidenceId;
+    private String evidenceGuid;
 
     @Column(name="ksb_code")
     private String ksbCode;

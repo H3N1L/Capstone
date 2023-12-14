@@ -6,21 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "evidence")
 public class Evidence {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer evidenceId;
+
+    @Column(name = "evidence_guid")
+    private String evidenceGuid;
 
     @Column(name = "evidence_type")
     private String type;
@@ -34,10 +39,12 @@ public class Evidence {
     @Column(name="s3_guid")
     private String s3Guid;
 
+    @Column(name="ksb_id")
+    private String ksbId;
+
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     @Column(name = "insert_timestamp", updatable = false)
-    private Date insertTimestamp;
+    private LocalDateTime insertTimestamp;
 
     @Column(name="evidence_description")
     private String evidenceDescription;

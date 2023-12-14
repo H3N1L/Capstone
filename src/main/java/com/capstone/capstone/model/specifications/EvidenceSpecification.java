@@ -18,7 +18,7 @@ public class EvidenceSpecification {
 
     public static Specification<Evidence> hasApprenticeId(Integer apprenticeId) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("apprentice_id"), apprenticeId);
+                criteriaBuilder.equal(root.get("apprenticeId"), apprenticeId);
     }
 
     public static Specification<Evidence> hasS3Guid(String s3Guid) {
@@ -66,10 +66,10 @@ public class EvidenceSpecification {
         };
     }
 
-
-
-
-
+    public static Specification<Evidence> hasEvidenceGuid(String evidenceGuid) {
+        return (root, criteriaQuery, criteriaBuilder) ->
+             criteriaBuilder.equal(root.get("evidenceGuid"), evidenceGuid);
+    }
 
 
 

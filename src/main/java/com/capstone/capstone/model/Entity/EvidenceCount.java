@@ -25,16 +25,12 @@ public class EvidenceCount {
     private Integer apprenticeId;
 
     @Column(name = "ksb_code")
-    private Integer ksbCode;
+    private String ksbCode;
 
     @Column(name = "timestamp")
     private LocalDateTime insertTimestamp;
 
     @Column(name = "evidence_count")
     private Integer count;
-
-
-
-
 
 }

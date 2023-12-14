@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.capstone.capstone.model.amazon.EvidenceInformation;
 import com.capstone.capstone.util.ConvertToFile;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +21,10 @@ import java.util.UUID;
 @Transactional
 public class AmazonClientService {
 
-
     @Autowired
     private AmazonS3 amazonS3;
 
-    @Autowired
-    TextEvidenceService textEvidenceService;
+    private ConvertToFile convertToFile;
 
     @Value("${amazon.s3.endpoint}")
     private String url;
@@ -48,8 +47,8 @@ public class AmazonClientService {
     }
 
 
-    public String uploadFile(MultipartFile multipartFile, String userID) {
-        File file = ConvertToFile.convertMultiPartFileToFile(multipartFile);
+    public String uploadFile(@NonNull MultipartFile multipartFile, @NonNull String userID) {
+        File file = convertToFile.convertMultiPartFileToFile(multipartFile);
         PutObjectResult putObjectResult = amazonS3.putObject(bucketName, userID, file);
         file.delete();
         return userID;
@@ -57,10 +56,8 @@ public class AmazonClientService {
 
     public String submitMediaEvidence(MultipartFile multipartFile, EvidenceInformation evidenceInformation) {
         String fileKey = UUID.randomUUID().toString();
-        File file = ConvertToFile.convertMultiPartFileToFile(multipartFile);
+        File file = convertToFile.convertMultiPartFileToFile(multipartFile);
         amazonS3.putObject(bucketName, fileKey, file);
-        textEvidenceService.addEvidenceLink(evidenceInformation);
-        textEvidenceService.insertEvidence(evidenceInformation, fileKey);
         file.delete();
         return "Evidence submitted successfully";
     }

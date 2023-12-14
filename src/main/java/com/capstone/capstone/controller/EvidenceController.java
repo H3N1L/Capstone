@@ -5,14 +5,13 @@ import com.capstone.capstone.model.Entity.Apprentice;
 import com.capstone.capstone.model.Entity.Evidence;
 import com.capstone.capstone.model.Entity.EvidenceKsbMapper;
 import com.capstone.capstone.model.Entity.UserEvidence;
-import com.capstone.capstone.model.mongodb.EvidenceMongo;
 import com.capstone.capstone.model.specifications.EvidenceSpecification;
 import com.capstone.capstone.repository.ApprenticeRepository;
 import com.capstone.capstone.repository.EvidenceRepository;
 import com.capstone.capstone.repository.EvidenceKsbMapperRepository;
 import com.capstone.capstone.service.AmazonClientService;
 import com.capstone.capstone.service.ApprenticeService;
-import com.capstone.capstone.service.TextEvidenceService;
+import com.capstone.capstone.service.EvidenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,19 +21,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
 @Slf4j
 public class EvidenceController {
 
-    @Autowired private TextEvidenceService textEvidenceService;
     @Autowired private ApprenticeRepository apprenticeRepository;
     @Autowired private ApprenticeService apprenticeService;
     @Autowired private AmazonClientService amazonClientService;
     @Autowired private EvidenceRepository evidenceRepository;
     @Autowired private EvidenceKsbMapperRepository evidenceToKsbRepository;
+    @Autowired private EvidenceService evidenceService;
 
 
     @ApiIgnore
@@ -43,77 +41,33 @@ public class EvidenceController {
         response.sendRedirect("/swagger-ui.html");
     }
 
-
 //    @GetMapping("/Connected")
 //    public ResponseEntity<String> connect() {
 //        return new ResponseEntity<>("Connected", HttpStatus.CREATED);
 //    }
 
-    @PostMapping("/updateApprenticeFirstName")
-    public Apprentice updateApprenticeName(){
-        return apprenticeService.updateFirstName(1, "Henil");
-    }
-
-    @GetMapping("/allEvidence")
-    public List<EvidenceMongo> getAllEvidence() {
-        return textEvidenceService.getAllEvidence();
-    }
 
     @GetMapping("/allUsers")
     public List<Apprentice> getAllUsers() {
         return apprenticeRepository.findAll();
     }
 
-//    @GetMapping("/updateUserKey")
-//    public UserInformation updateUserKey() {
-//
-//        UserInformation userInformation =  userInformationRepository.findByFistName("Henil");
-//        userInformation.setKey(UUID.randomUUID().toString());
-//        return userInformationRepository.save(userInformation);
-//    }
 
     @PostMapping("/AddEvidence")
     public Evidence addFrontEndEvidence(
-           @RequestBody UserEvidence userEvidence) {
+           @RequestBody UserEvidence userEvidence) throws Exception {
 
         String fileKey = amazonClientService.uploadEvidencePayload(userEvidence.getSubmittedContent());
-        Evidence evidence = Evidence.builder()
-                .evidenceDescription(userEvidence.getDescription())
-                .type(userEvidence.getType())
-                .apprenticeId(1)
-                .specialism(userEvidence.getSpecialism())
-                .s3Guid(fileKey)
-                .build();
-
-        Evidence retrievedEvidence = evidenceRepository.save(evidence);
-
-        evidenceToKsbRepository.save(EvidenceKsbMapper.builder()
-                .evidenceId(retrievedEvidence.getEvidenceId())
-                .ksbCode(userEvidence.getKsbID())
-                .build());
-
+        Evidence retrievedEvidence = evidenceService.uploadSubmittedEvidence(userEvidence, fileKey);
+        evidenceService.uploadEvidenceToKsbMapper(retrievedEvidence);
         log.info("#### Inserted Evidence: " + retrievedEvidence);
         return retrievedEvidence;
-
     }
 
     @GetMapping("/retrieveSubmittedContent")
-    public String retrieveSubmittedContent(@RequestParam Long evidenceId) {
-
-        Optional<Evidence> evidenceOptional = evidenceRepository.findById(evidenceId.intValue());
-        if(evidenceOptional.isPresent()) {
-            return amazonClientService.retrieveSubmittedContent(
-                    evidenceOptional
-                            .get()
-                            .getS3Guid());
-        }
-        else
-            return "No Evidence Found for evidenceID: " + evidenceId;
-    }
-
-    @GetMapping("/retrieve")
-    public String retrieve(@RequestParam String s3Key) {
-        return amazonClientService.retrieveSubmittedContent(s3Key);
+    public String retrieveSubmittedContent(@RequestParam String evidenceId) throws Exception {
+        return amazonClientService.retrieveSubmittedContent(
+                evidenceService.retrieveMediaContentKey(evidenceId));
     }
 
     @GetMapping("/retrieveAllApprenticeEvidence")
@@ -124,7 +78,6 @@ public class EvidenceController {
         evidences.forEach(evidence -> {
             userEvidenceList.add(UserEvidence.builder()
                     .evidenceId(evidence.getEvidenceId().toString())
-                    .dateCreated(evidence.getInsertTimestamp().toString())
                     .specialism(evidence.getSpecialism())
                     .type(evidence.getType())
                     .description(evidence.getEvidenceDescription())
@@ -133,16 +86,60 @@ public class EvidenceController {
         return userEvidenceList;
     }
 
-//    @GetMapping("/retrieveAllApprenticeContentBySpecialism")
-//    public List<UserEvidence> retrieveAllContentBySpecialism(
-//            @RequestParam Long userId,
-//            @RequestParam String specialism) {
-//
-//        List<UserEvidence> userEvidenceList = new ArrayList<>();
-//        List<Evidence> evidenceList = evidenceRepository.findAll(EvidenceSpecification.hasSpecialism())
-//
-//
-//    }
+    @GetMapping("/retrieveEvidenceSpecific")
+    public UserEvidence retrieveSpecificEvidence(@RequestParam String evidenceGuid) throws Exception {
+        Evidence evidence1 = evidenceService.retrieveSpecificEvidence(evidenceGuid);
+
+        log.info("######" + evidence1);
+        EvidenceKsbMapper evidenceKsbMapper1 = evidenceService.retrieveEvidencKsbMap(evidence1);
+        log.info("######" + evidenceKsbMapper1);
+        return UserEvidence.builder()
+                .evidenceId(evidence1.getEvidenceGuid())
+                .dateCreated(evidence1.getInsertTimestamp().toLocalDate().toString())
+                .specialism(evidence1.getSpecialism())
+                .description(evidence1.getEvidenceDescription())
+                .ksbID(evidenceKsbMapper1.getKsbCode())
+                .type(evidence1.getType())
+                .build();
+    }
+
+    @GetMapping("/retrieveAllApprenticeContentBySpecialism")
+    public List<UserEvidence> retrieveAllContentBySpecialism(
+            @RequestParam Long userId,
+            @RequestParam String specialism) throws Exception {
+
+        List<UserEvidence> userEvidenceList = new ArrayList<>();
+        Specification<Evidence> evidenceSpecification = Specification.where(null);
+        evidenceSpecification.and(EvidenceSpecification.hasApprenticeId(userId.intValue()));
+        evidenceSpecification.and(EvidenceSpecification.hasSpecialism(specialism));
+        List<Evidence> evidenceList = evidenceRepository.findAll(evidenceSpecification);
+        if(!evidenceList.isEmpty()){
+            evidenceList.forEach(
+                    evidence -> {
+                        EvidenceKsbMapper evidenceKsbMapper1 = null;
+                        try {
+                            evidenceKsbMapper1 = evidenceService.retrieveEvidencKsbMap(evidence);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        log.info("######" + evidenceKsbMapper1);
+                        UserEvidence userEvidence = UserEvidence.builder()
+                                .evidenceId(evidence.getEvidenceGuid())
+                                .dateCreated(evidence.getInsertTimestamp().toLocalDate().toString())
+                                .specialism(evidence.getSpecialism())
+                                .description(evidence.getEvidenceDescription())
+                                .ksbID(evidenceKsbMapper1.getKsbCode())
+                                .type(evidence.getType())
+                                .build();
+                        userEvidenceList.add(userEvidence);
+                    });
+        }
+        else {
+            throw new Exception("No evidence objects found for ApprenticeID: " + userId.toString() +
+                    " and specialism: " + specialism);
+        }
+        return userEvidenceList;
+    }
     
 
 //    @PostMapping("/addUniveristySeedData")

@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-@UtilityClass
+
 @Slf4j
 public class ConvertToFile {
 
