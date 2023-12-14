@@ -81,6 +81,8 @@ public class EvidenceController {
                     .specialism(evidence.getSpecialism())
                     .type(evidence.getType())
                     .description(evidence.getEvidenceDescription())
+                    .dateCreated(evidence.getInsertTimestamp().toLocalDate().toString())
+                    .ksbID(evidence.getKsbId())
                     .build());
         });
         return userEvidenceList;
