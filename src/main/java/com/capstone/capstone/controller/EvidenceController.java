@@ -71,13 +71,13 @@ public class EvidenceController {
     }
 
     @GetMapping("/retrieveAllApprenticeEvidence")
-    public List<UserEvidence> retrieveAllApprenticeEvidence(@RequestParam Long userId) {
-        Specification<Evidence> evidenceSpecification = EvidenceSpecification.hasApprenticeId(userId.intValue());
+    public List<UserEvidence> retrieveAllApprenticeEvidence(@RequestParam Integer userId) {
+        Specification<Evidence> evidenceSpecification = EvidenceSpecification.hasApprenticeId(userId);
         List<Evidence> evidences = evidenceRepository.findAll(evidenceSpecification);
         List<UserEvidence> userEvidenceList = new ArrayList<>();
         evidences.forEach(evidence -> {
             userEvidenceList.add(UserEvidence.builder()
-                    .evidenceId(evidence.getEvidenceId().toString())
+                    .evidenceId(evidence.getEvidenceGuid())
                     .specialism(evidence.getSpecialism())
                     .type(evidence.getType())
                     .description(evidence.getEvidenceDescription())
