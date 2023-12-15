@@ -15,9 +15,4 @@ public interface EvidenceRepository extends JpaRepository<Evidence, Integer>, Jp
 
     Optional<Evidence> findOne(Specification<Evidence> evidenceSpecification);
 
-//    //Find All Evidence By ApprenticeId and Month
-//    List<Evidence>  findByApprenticeIdAndInsertTimestamp(Specification<Evidence> evidenceSpecification);
-//
-//    //Find by Date
-//    List<Evidence> findByInsertTimestamp(Specification<Evidence> evidenceSpecification);
 }

@@ -1,6 +1,6 @@
 package com.capstone.capstone.model.specifications;
 
-import com.capstone.capstone.model.Entity.Apprentice;
+
 import com.capstone.capstone.model.Entity.Evidence;
 import org.springframework.data.jpa.domain.Specification;
 

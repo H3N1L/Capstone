@@ -2,6 +2,7 @@ package com.capstone.capstone.controller;
 
 
 import com.capstone.capstone.model.Entity.Evidence;
+import com.capstone.capstone.model.Entity.EvidenceKsbMapper;
 import com.capstone.capstone.model.Entity.UserEvidence;
 import com.capstone.capstone.repository.ApprenticeRepository;
 import com.capstone.capstone.repository.EvidenceKsbMapperRepository;
@@ -98,6 +99,67 @@ class EvidenceControllerTest {
         List<UserEvidence> result = evidenceController.retrieveAllApprenticeEvidence(1);
         assertThat(result.get(0).getEvidenceId()).isEqualTo("Guid");
         assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    void whenRequestToRetrieveSpecificEvidence_thenReturn() throws Exception {
+
+        when(evidenceService.retrieveSpecificEvidence(any()))
+                .thenReturn(Evidence.builder()
+                        .evidenceId(1)
+                        .evidenceGuid("Guid")
+                        .s3Guid("S3_GUID")
+                        .apprenticeId(1)
+                        .specialism("specialism")
+                        .insertTimestamp(LocalDateTime.now())
+                        .type("Type")
+                        .ksbId("K2")
+                        .build());
+
+        when(evidenceService.retrieveEvidencKsbMap(any()))
+                .thenReturn(EvidenceKsbMapper.builder()
+                        .evidenceGuid("Guid")
+                        .evidenceToKsbId(1)
+                        .ksbCode("K2")
+                        .build());
+
+        UserEvidence userEvidence = evidenceController.retrieveSpecificEvidence("Guid");
+
+        assertThat(userEvidence.getEvidenceId()).isEqualTo("Guid");
+        assertThat(userEvidence.getSubmittedContent()).isNull();
+    }
+
+    @Test
+    void whenRetrievingEvidenceBySpecialism_thenReturnList() throws Exception {
+
+        when(evidenceRepository.findAll(any(Specification.class)))
+                .thenReturn(List.of(Evidence.builder()
+                        .evidenceId(1)
+                        .evidenceGuid("Guid")
+                        .s3Guid("S3_GUID")
+                        .apprenticeId(1)
+                        .specialism("specialism")
+                        .insertTimestamp(LocalDateTime.now())
+                        .type("Type")
+                        .ksbId("K2")
+                        .build()));
+
+        when(evidenceService.retrieveEvidencKsbMap(any()))
+                .thenReturn(EvidenceKsbMapper.builder()
+                        .evidenceGuid("Guid")
+                        .evidenceToKsbId(1)
+                        .ksbCode("K2")
+                        .build());
+
+
+        List<UserEvidence> resultList = evidenceController.retrieveAllContentBySpecialism(Long.valueOf("1"),
+                "specialism");
+
+
+        assertThat(resultList.size()).isEqualTo(1);
+
+
+
     }
 
 
