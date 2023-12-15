@@ -1,4 +1,4 @@
-package com.capstone.capstone.model;
+package com.capstone.capstone.model.mongodb;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 @Builder
 @Document(collection = "User")
 public class UserInformation  {
+
+
     @Id
     private String id;
 
@@ -21,5 +23,7 @@ public class UserInformation  {
     private String key;
     private ArrayList<String> coreKsb;
     private ArrayList<String> specialKsb;
+    private String universityCode;
+    private String degreeCode;
     private String email;
 }
